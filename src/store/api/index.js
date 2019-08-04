@@ -1,1 +1,5 @@
-export default {};
+export const getMetricsQuery = `	
+query getMetrics {	
+  getMetrics
+}	
+`;

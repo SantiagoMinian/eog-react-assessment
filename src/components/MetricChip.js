@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/core";
@@ -37,9 +37,11 @@ const MetricChip = props => {
     textColor
   });
 
-  return (
-    <Chip label={metric} className={classes.root} onClick={toggleSelected} />
-  );
+  const onClick = useCallback(() => {
+    toggleSelected(metric);
+  }, [toggleSelected, metric]);
+
+  return <Chip label={metric} className={classes.root} onClick={onClick} />;
 };
 
 MetricChip.defaultProps = {
