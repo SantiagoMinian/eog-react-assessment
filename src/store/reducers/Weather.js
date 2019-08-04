@@ -1,4 +1,5 @@
 import * as actions from "../actions";
+import createReducer from "../utils/createReducer";
 
 const initialState = {
   temperatureinCelsius: null,
@@ -29,8 +30,4 @@ const handlers = {
   [actions.WEATHER_DATA_RECEIVED]: weatherDataRecevied
 };
 
-export default (state = initialState, action) => {
-  const handler = handlers[action.type];
-  if (typeof handler === "undefined") return state;
-  return handler(state, action);
-};
+export default createReducer(initialState, handlers);
