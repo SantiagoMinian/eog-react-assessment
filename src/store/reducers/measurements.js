@@ -4,7 +4,7 @@ import { ACTION_TYPES } from "../actions/measurements";
 const initialState = {};
 
 const measurementsReceived = (state, action) => {
-  return action.payload.measurements.reduce(
+  return action.payload.data.getMultipleMeasurements.reduce(
     (accumulator, { metric, measurements }) => {
       return {
         ...accumulator,
@@ -21,8 +21,27 @@ const measurementsReceived = (state, action) => {
   );
 };
 
+const newMeasurementReceived = (state, action) => {
+  const measurement = action.payload.data.newMeasurement;
+  if (!state[measurement.metric]) return state;
+  return {
+    ...state,
+    [measurement.metric]: {
+      measurements: [
+        ...state[measurement.metric].measurements,
+        {
+          at: measurement.at,
+          [measurement.metric]: measurement.value
+        }
+      ],
+      unit: measurement.unit
+    }
+  };
+};
+
 const handlers = {
-  [ACTION_TYPES.MEASUREMENTS_RECEIVED]: measurementsReceived
+  [ACTION_TYPES.MEASUREMENTS_RECEIVED]: measurementsReceived,
+  [ACTION_TYPES.NEW_MEASUREMENT_RECEIVED]: newMeasurementReceived
 };
 
 export default createReducer(initialState, handlers);

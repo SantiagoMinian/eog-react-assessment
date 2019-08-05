@@ -3,9 +3,9 @@ export const ACTION_TYPES = {
   TOGGLE_METRIC: "METRICS/TOGGLE_METRIC"
 };
 
-export const metricsReceived = metrics => ({
+export const metricsReceived = data => ({
   type: ACTION_TYPES.METRICS_RECEIVED,
-  payload: { metrics }
+  payload: { data }
 });
 
 export const toggleMetric = metricName => ({

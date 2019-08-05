@@ -4,7 +4,7 @@ import { ACTION_TYPES } from "../actions/metrics";
 const initialState = [];
 
 const metricsReceived = (_, action) => {
-  return action.payload.metrics.map(metric => ({
+  return action.payload.data.getMetrics.map(metric => ({
     name: metric,
     selected: false
   }));

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "urql";
 
@@ -7,24 +7,19 @@ import MetricChip from "./MetricChip";
 import { metricsReceived, toggleMetric } from "../store/actions/metrics";
 import { getMetricsQuery } from "../store/api";
 import colors from "../constants/colors";
+import useUrqlWithRedux from "../store/utils/useUrqlWithRedux";
 
 const MetricList = () => {
   const metrics = useSelector(state => state.metrics);
 
   const dispatch = useDispatch();
 
-  const [result] = useQuery({ query: getMetricsQuery });
-  const { fetching, data, error } = result;
-
-  useEffect(() => {
-    if (error) {
-      dispatch({ type: actions.API_ERROR, error: error.message });
-      return;
-    }
-    if (!data) return;
-    const { getMetrics } = data;
-    dispatch(metricsReceived(getMetrics));
-  }, [dispatch, data, error]);
+  const fetching = useUrqlWithRedux(
+    useQuery,
+    { query: getMetricsQuery },
+    actions.apiError,
+    metricsReceived
+  );
 
   const toggle = useCallback(
     metric => {

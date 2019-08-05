@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "urql";
+import React from "react";
+import { useSelector } from "react-redux";
+import { useQuery, useSubscription } from "urql";
 import {
   ResponsiveContainer,
   LineChart,
@@ -12,9 +12,13 @@ import {
 import moment from "moment";
 
 import * as actions from "../store/actions";
-import { getMeasurementsQuery } from "../store/api";
-import { measurementsReceived } from "../store/actions/measurements";
+import { getMeasurementsQuery, newMeasurementSubscription } from "../store/api";
+import {
+  measurementsReceived,
+  newMeasurementReceived
+} from "../store/actions/measurements";
 import colors from "../constants/colors";
+import useUrqlWithRedux from "../store/utils/useUrqlWithRedux";
 
 const from = Date.now() - 30 * 60 * 1000;
 const MeasurementsChart = () => {
@@ -42,25 +46,25 @@ const MeasurementsChart = () => {
       []
     )
   );
-  const dispatch = useDispatch();
 
-  const [result] = useQuery({
-    query: getMeasurementsQuery,
-    variables: {
-      input: metrics.map(metric => ({ metricName: metric.name, after: from }))
-    }
-  });
-  const { fetching, data, error } = result;
+  const fetching = useUrqlWithRedux(
+    useQuery,
+    {
+      query: getMeasurementsQuery,
+      variables: {
+        input: metrics.map(metric => ({ metricName: metric.name, after: from }))
+      }
+    },
+    actions.apiError,
+    measurementsReceived
+  );
 
-  useEffect(() => {
-    if (error) {
-      dispatch({ type: actions.API_ERROR, error: error.message });
-      return;
-    }
-    if (!data) return;
-    const { getMultipleMeasurements } = data;
-    dispatch(measurementsReceived(getMultipleMeasurements));
-  }, [dispatch, data, error]);
+  useUrqlWithRedux(
+    useSubscription,
+    { query: newMeasurementSubscription },
+    actions.apiError,
+    newMeasurementReceived
+  );
 
   if (fetching) return "Loading...";
 
@@ -68,7 +72,7 @@ const MeasurementsChart = () => {
     metrics.length > 0 && (
       <ResponsiveContainer width="100%" height="80%">
         <LineChart
-          data={measurements}
+          data={[...measurements]}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
           <XAxis

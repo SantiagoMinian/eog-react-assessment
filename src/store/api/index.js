@@ -16,3 +16,14 @@ query getMeasurements($input: [MeasurementQuery]!) {
   }
 }
 `;
+
+export const newMeasurementSubscription = `
+subscription newMeasurement {
+  newMeasurement {
+    metric
+    value
+    at
+    unit
+  }
+}
+`;
