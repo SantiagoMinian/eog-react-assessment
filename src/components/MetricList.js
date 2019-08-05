@@ -6,6 +6,7 @@ import * as actions from "../store/actions";
 import MetricChip from "./MetricChip";
 import { metricsReceived, toggleMetric } from "../store/actions/metrics";
 import { getMetricsQuery } from "../store/api";
+import colors from "../constants/colors";
 
 const MetricList = () => {
   const metrics = useSelector(state => state.metrics);
@@ -37,12 +38,13 @@ const MetricList = () => {
   return (
     <div>
       {metrics &&
-        metrics.map(metric => {
+        metrics.map((metric, index) => {
           return (
             <MetricChip
               key={metric.name}
               metric={metric.name}
               selected={metric.selected}
+              selectedColor={colors[index]}
               toggleSelected={toggle}
             />
           );

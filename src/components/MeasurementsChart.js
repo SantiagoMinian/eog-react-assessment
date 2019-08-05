@@ -14,19 +14,21 @@ import moment from "moment";
 import * as actions from "../store/actions";
 import { getMeasurementsQuery } from "../store/api";
 import { measurementsReceived } from "../store/actions/measurements";
+import colors from "../constants/colors";
 
 const from = Date.now() - 30 * 60 * 1000;
 const MeasurementsChart = () => {
   const metrics = useSelector(state =>
     state.metrics
-      .filter(metric => metric.selected)
-      .map(metric => ({
+      .map((metric, index) => ({
         ...metric,
         unit:
           state.measurements &&
           state.measurements[metric.name] &&
-          state.measurements[metric.name].unit
+          state.measurements[metric.name].unit,
+        color: colors[index]
       }))
+      .filter(metric => metric.selected)
   );
 
   const measurements = useSelector(state =>
@@ -100,7 +102,7 @@ const MeasurementsChart = () => {
               yAxisId={metric.unit}
               isAnimationActive={false}
               dataKey={metric.name}
-              stroke="#8884d8"
+              stroke={metric.color}
               dot={false}
             />
           ))}
