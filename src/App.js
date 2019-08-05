@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import createStore from "./store";
 import Wrapper from "./components/Wrapper";
 import MetricList from "./components/MetricList";
+import MeasurementsChart from "./components/MeasurementsChart";
 
 const store = createStore();
 const theme = createMuiTheme({
@@ -40,6 +41,7 @@ const App = () => {
         <UrqlProvider value={client}>
           <Wrapper>
             <MetricList />
+            <MeasurementsChart />
             <ToastContainer />
           </Wrapper>
         </UrqlProvider>

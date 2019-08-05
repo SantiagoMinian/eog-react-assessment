@@ -3,10 +3,12 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from "redux-saga";
 import sagas from "./sagas";
 import metricsReducer from "./reducers/metrics";
+import measurementsReducer from "./reducers/measurements";
 
 export default () => {
   const rootReducer = combineReducers({
-    metrics: metricsReducer
+    metrics: metricsReducer,
+    measurements: measurementsReducer
   });
 
   const composeEnhancers = composeWithDevTools({});
