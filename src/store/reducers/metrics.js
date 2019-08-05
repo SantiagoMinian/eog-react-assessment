@@ -19,9 +19,17 @@ const toggleMetric = (state, action) => {
   );
 };
 
+const updateMetric = (state, action) => {
+  const { metricName, value } = action.payload;
+  return state.map(metric =>
+    metric.name === metricName ? { ...metric, value } : metric
+  );
+};
+
 const handlers = {
   [ACTION_TYPES.METRICS_RECEIVED]: metricsReceived,
-  [ACTION_TYPES.TOGGLE_METRIC]: toggleMetric
+  [ACTION_TYPES.TOGGLE_METRIC]: toggleMetric,
+  [ACTION_TYPES.UPDATE_METRIC]: updateMetric
 };
 
 export default createReducer(initialState, handlers);

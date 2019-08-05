@@ -25,6 +25,7 @@ const MetricChip = props => {
   const {
     selected,
     metric,
+    value,
     toggleSelected,
     selectedColor,
     unselectedColor,
@@ -41,13 +42,20 @@ const MetricChip = props => {
     toggleSelected(metric);
   }, [toggleSelected, metric]);
 
-  return <Chip label={metric} className={classes.root} onClick={onClick} />;
+  return (
+    <Chip
+      label={`${metric} ${value}`}
+      className={classes.root}
+      onClick={onClick}
+    />
+  );
 };
 
 MetricChip.defaultProps = {
   selectedColor: "#1976D2",
-  unselectedColor: "#CFCFCF",
-  textColor: "#FFFFFF"
+  unselectedColor: "#5F5F5F",
+  textColor: "#FFFFFF",
+  value: 0
 };
 
 MetricChip.propTypes = {
@@ -55,8 +63,9 @@ MetricChip.propTypes = {
   selected: PropTypes.bool.isRequired,
   selectedColor: PropTypes.string,
   unselectedColor: PropTypes.string,
+  toggleSelected: PropTypes.func.isRequired,
   textColor: PropTypes.string,
-  toggleSelected: PropTypes.func.isRequired
+  value: PropTypes.number
 };
 
 export default MetricChip;

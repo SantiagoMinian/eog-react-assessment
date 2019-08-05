@@ -28,12 +28,6 @@ const theme = createMuiTheme({
     useNextVariants: true
   },
   palette: {
-    primary: {
-      main: "rgb(39,49,66)"
-    },
-    secondary: {
-      main: "rgb(177,178,192)"
-    },
     background: {
       main: "rgb(226,231,238)"
     }
